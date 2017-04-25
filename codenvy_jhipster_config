@@ -1,0 +1,30 @@
+{
+  "environments": {
+    "wksp-rzgf": {
+      "machines": {
+        "dev-machine": {
+          "attributes": {
+            "memoryLimitBytes": "2147483648"
+          },
+          "servers": {},
+          "agents": [
+            "org.eclipse.che.exec",
+            "org.eclipse.che.terminal",
+            "org.eclipse.che.ws-agent",
+            "org.eclipse.che.ssh"
+          ]
+        }
+      },
+      "recipe": {
+        "type": "dockerfile",
+        "content": "FROM ubuntu:xenial\nRUN groupadd jhipster && useradd jhipster -s /bin/bash -m -g jhipster -G sudo && echo 'jhipster:jhipster' |chpasswd && mkdir /home/jhipster/app && apt-get update && apt-get install -y openjdk-8-jdk && apt-get install -y wget curl vim git zip bzip2 fontconfig python build-essential && curl -sL https://deb.nodesource.com/setup_6.x | bash && apt-get install -y nodejs && npm install -g npm && npm install -g yarn && su -c \"yarn config set prefix /home/jhipster/.yarn-global\" jhipster && su -c \"yarn global add yo bower gulp-cli\" jhipster && apt-get clean && rm -rf COPY . /home/jhipster/generator-jhipster\nRUN chown -R jhipster:jhipster \\\njhipster \\\nnode_modules && \\\nrm -Rf /home/jhipster/generator-jhipster/node_modules \\\nlock \\\nlog && \\\nsu -c \"cd /home/jhipster/generator-jhipster && yarn install\" jhipster && \\\nsu -c \"yarn global add file:/home/jhipster/generator-jhipster\" jhipster && \\\nrm -rf \\\nUSER jhipster\nENV PATH $PATH:/usr/bin:/home/jhipster/.yarn-global/bin:/home/jhipster/.yarn/bin:/home/jhipster/.config/yarn/global/node_modules/.bin\nWORKDIR \"/home/jhipster/app\"\nVOLUME [\"/home/jhipster/app\"]\nEXPOSE 8080 9000 3001\nCMD [\"tail\", \"-f\", \"/home/jhipster/generator-jhipster/generators/server/templates/src/main/resources/banner-no-color.txt\"]\n",
+        "contentType": "text/x-dockerfile"
+      }
+    }
+  },
+  "defaultEnv": "wksp-rzgf",
+  "projects": [],
+  "name": "wksp-rzgf",
+  "commands": [],
+  "links": []
+}
